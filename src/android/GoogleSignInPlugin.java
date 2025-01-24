@@ -48,7 +48,7 @@ public class GoogleSignInPlugin extends CordovaPlugin {
     private static final int RC_ONE_TAP = 102;
 
     private GoogleSignInAccount account;
-    private FirebaseAuth mAuth;
+    // private FirebaseAuth mAuth;
 
     private SignInClient mOneTapSigninClient;
     private BeginSignInRequest mSiginRequest;
@@ -61,9 +61,9 @@ public class GoogleSignInPlugin extends CordovaPlugin {
     public void initialize(CordovaInterface cordova, CordovaWebView webView) {
         super.initialize(cordova, webView);
         mCurrentActivity = this.cordova.getActivity();
-        mAuth = FirebaseAuth.getInstance();
+        // mAuth = FirebaseAuth.getInstance();
         mContext = this.cordova.getActivity().getApplicationContext();
-        FirebaseApp.initializeApp(mContext);
+        // FirebaseApp.initializeApp(mContext);
         checkIfOneTapSignInCoolingPeriodShouldBeReset();
     }
 
