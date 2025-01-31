@@ -115,7 +115,7 @@ public class GoogleSignInPlugin extends CordovaPlugin {
             } catch (Exception ex) {
                 System.out.println("Google sign in failed: " + ex);
                 
-
+                mCallbackContext.error(getErrorMessageInJsonString(ex.getLocalizedMessage()));
             }
         } else if (requestCode == RC_ONE_TAP) {
             try {
