@@ -71,7 +71,7 @@
         NSDictionary *result = @{
           @"email"            : email,
           @"id"               : userId,
-          @"id_token"         : signInResult.user.idToken,
+          @"id_token"         : signInResult.user.idToken.tokenString,
           @"display_name"     : signInResult.user.profile.name       ? : [NSNull null],
           @"given_name"       : signInResult.user.profile.givenName  ? : [NSNull null],
           @"family_name"      : signInResult.user.profile.familyName ? : [NSNull null],
