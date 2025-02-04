@@ -57,34 +57,81 @@
     GIDConfiguration *config = [[GIDConfiguration alloc] initWithClientID:clientId];
     
     GIDSignIn *signIn = GIDSignIn.sharedInstance;
-    
-    [signIn signInWithConfiguration:config presentingViewController:self.viewController callback:^(GIDGoogleUser * _Nullable user, NSError * _Nullable error) {
-        if (error) {
-            NSDictionary *errorDetails = @{@"status": @"error", @"message": error.localizedDescription};
-            CDVPluginResult * pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:[self toJSONString:errorDetails]];
-            [self.commandDelegate sendPluginResult:pluginResult callbackId:self->_callbackId];
-        } else {
-            NSString *email = user.profile.email;
-            NSString *userId = user.userID;
-            NSURL *imageUrl = [user.profile imageURLWithDimension:120]; // TODO pass in img size as param, and try to sync with Android
-            NSDictionary *result = @{
-                           @"email"            : email,
-                           @"id"               : userId,
-                           @"id_token"         : user.authentication.idToken,
-                           @"display_name"     : user.profile.name       ? : [NSNull null],
-                           @"given_name"       : user.profile.givenName  ? : [NSNull null],
-                           @"family_name"      : user.profile.familyName ? : [NSNull null],
-                           @"photo_url"        : imageUrl ? imageUrl.absoluteString : [NSNull null],
-                           };
-
-
-            NSDictionary *response = @{@"message": result, @"status": @"success"};
-            
-            CDVPluginResult * pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString: [self toJSONString:response]];
-            [self.commandDelegate sendPluginResult:pluginResult callbackId:self->_callbackId];
-        }
-    }];
+  
+  [signIn signInWithPresentingViewController:self.viewController completion:^(GIDSignInResult * _Nullable signInResult, NSError * _Nullable error)
+    {
+      if (error) {
+        NSDictionary *errorDetails = @{@"status": @"error", @"message": error.localizedDescription};
+        CDVPluginResult * pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:[self toJSONString:errorDetails]];
+        [self.commandDelegate sendPluginResult:pluginResult callbackId:self->_callbackId];
+      } else {
+        NSString *email = signInResult.user.profile.email;
+        NSString *userId = signInResult.user.userID;
+        NSURL *imageUrl = [signInResult.user.profile imageURLWithDimension:120]; // TODO pass in img size as param, and try to sync with Android
+        NSDictionary *result = @{
+          @"email"            : email,
+          @"id"               : userId,
+          @"id_token"         : signInResult.user.idToken,
+          @"display_name"     : signInResult.user.profile.name       ? : [NSNull null],
+          @"given_name"       : signInResult.user.profile.givenName  ? : [NSNull null],
+          @"family_name"      : signInResult.user.profile.familyName ? : [NSNull null],
+          @"photo_url"        : imageUrl ? imageUrl.absoluteString : [NSNull null],
+        };
+        
+        
+        NSDictionary *response = @{@"message": result, @"status": @"success"};
+        
+        CDVPluginResult * pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString: [self toJSONString:response]];
+        [self.commandDelegate sendPluginResult:pluginResult callbackId:self->_callbackId];
+      }
+    }
+  ];
 }
+
+// - (void) signIn:(CDVInvokedUrlCommand*)command {
+//     _callbackId = command.callbackId;
+//     NSString *reversedClientId = [self getreversedClientId];
+
+//     if (reversedClientId == nil) {
+//         NSDictionary *errorDetails = @{@"status": @"error", @"message": @"Could not find REVERSED_CLIENT_ID url scheme in app .plist"};
+//         CDVPluginResult * pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:[self toJSONString:errorDetails]];
+//         [self.commandDelegate sendPluginResult:pluginResult callbackId:_callbackId];
+//         return;
+//     }
+
+//     NSString *clientId = [self reverseUrlScheme:reversedClientId];
+
+//     GIDConfiguration *config = [[GIDConfiguration alloc] initWithClientID:clientId];
+    
+//     GIDSignIn *signIn = GIDSignIn.sharedInstance;
+    
+//     [signIn signInWithConfiguration:config presentingViewController:self.viewController callback:^(GIDGoogleUser * _Nullable user, NSError * _Nullable error) {
+//         if (error) {
+//             NSDictionary *errorDetails = @{@"status": @"error", @"message": error.localizedDescription};
+//             CDVPluginResult * pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:[self toJSONString:errorDetails]];
+//             [self.commandDelegate sendPluginResult:pluginResult callbackId:self->_callbackId];
+//         } else {
+//             NSString *email = user.profile.email;
+//             NSString *userId = user.userID;
+//             NSURL *imageUrl = [user.profile imageURLWithDimension:120]; // TODO pass in img size as param, and try to sync with Android
+//             NSDictionary *result = @{
+//                            @"email"            : email,
+//                            @"id"               : userId,
+//                            @"id_token"         : user.authentication.idToken,
+//                            @"display_name"     : user.profile.name       ? : [NSNull null],
+//                            @"given_name"       : user.profile.givenName  ? : [NSNull null],
+//                            @"family_name"      : user.profile.familyName ? : [NSNull null],
+//                            @"photo_url"        : imageUrl ? imageUrl.absoluteString : [NSNull null],
+//                            };
+
+
+//             NSDictionary *response = @{@"message": result, @"status": @"success"};
+            
+//             CDVPluginResult * pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString: [self toJSONString:response]];
+//             [self.commandDelegate sendPluginResult:pluginResult callbackId:self->_callbackId];
+//         }
+//     }];
+// }
 
 - (NSString*) reverseUrlScheme:(NSString*)scheme {
     NSArray* originalArray = [scheme componentsSeparatedByString:@"."];
