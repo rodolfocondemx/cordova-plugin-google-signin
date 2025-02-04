@@ -164,8 +164,22 @@
     [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
 }
 
+// - (void) disconnect:(CDVInvokedUrlCommand*)command {
+//     [GIDSignIn.sharedInstance disconnectWithCallback:^(NSError * _Nullable error) {
+//         if(error == nil) {
+//             NSDictionary *details = @{@"status": @"success", @"message": @"Disconnected"};
+//             CDVPluginResult * pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:[self toJSONString:details]];
+//             [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
+//         } else {
+//             NSDictionary *details = @{@"status": @"error", @"message": [error localizedDescription]};
+//             CDVPluginResult * pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:[self toJSONString:details]];
+//             [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
+//         }
+//     }];
+// }
+
 - (void) disconnect:(CDVInvokedUrlCommand*)command {
-    [GIDSignIn.sharedInstance disconnectWithCallback:^(NSError * _Nullable error) {
+  [GIDSignIn.sharedInstance disconnectWithCompletion:^(NSError * _Nullable error) {
         if(error == nil) {
             NSDictionary *details = @{@"status": @"success", @"message": @"Disconnected"};
             CDVPluginResult * pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:[self toJSONString:details]];
