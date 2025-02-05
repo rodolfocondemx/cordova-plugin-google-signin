@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<plugin id="cordova-plugin-google-signin" version="2.1.0" xmlns="http://apache.org/cordova/ns/plugins/1.0" xmlns:android="http://schemas.android.com/apk/res/android">
+<plugin id="cordova-plugin-google-signin" version="2.3.0" xmlns="http://apache.org/cordova/ns/plugins/1.0" xmlns:android="http://schemas.android.com/apk/res/android">
     <name>GoogleSignInPlugin</name>
     <js-module name="GoogleSignInPlugin" src="www/GoogleSignInPlugin.js">
         <clobbers target="cordova.plugins.GoogleSignInPlugin" />
@@ -12,9 +12,9 @@
             </feature>
         </config-file>
         
-        <preference name="CLIENT_ID" />
+        <preference name="GOOGLE_CLIENT_ID" />
         <config-file target="res/values/strings.xml" parent="/*">
-            <string name="default_client_id">$CLIENT_ID</string>
+            <string name="default_client_id">$GOOGLE_CLIENT_ID</string>
         </config-file> 
 
         <config-file parent="/*" target="AndroidManifest.xml" />
@@ -33,7 +33,7 @@
         </config-file>
         <source-file src="src/ios/GoogleSignInPlugin.m" />
 
-        <preference name="REVERSED_CLIENT_ID" />
+        <!-- <preference name="REVERSED_CLIENT_ID" />
         <config-file target="*-Info.plist" parent="CFBundleURLTypes">
             <array>
               <dict>
@@ -47,11 +47,11 @@
                   </array>
               </dict>
             </array>
-          </config-file>
+          </config-file> -->
 
-        <preference name="CLIENT_ID" />
+        <preference name="IOS_CLIENT_ID" />
         <config-file target="*-Info.plist" parent="GIDClientID">
-            <string>$CLIENT_ID</string>
+            <string>$IOS_CLIENT_ID</string>
         </config-file>
 
           <podspec>
